@@ -1,60 +1,63 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { TeamMemberRow } from "@/components/team-member-row"
-import { LoadingSpinner } from "@/components/loading-spinner"
-import { ConfirmationModal } from "@/components/confirmation-modal"
-import { useConfirmation } from "@/hooks/use-confirmation"
-import { useToast } from "@/hooks/use-toast"
+import { ConfirmationModal } from "@/components/confirmation-modal";
+import { LoadingSpinner } from "@/components/loading-spinner";
+import { TeamMemberRow } from "@/components/team-member-row";
+import { useConfirmation } from "@/hooks/use-confirmation";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState } from "react";
 
 export default function NewTeamPage() {
-  const router = useRouter()
-  const { toast } = useToast()
-  const { confirm, isOpen, options, handleConfirm, handleCancel } = useConfirmation()
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const { toast } = useToast();
+  const { confirm, isOpen, options, handleConfirm, handleCancel } =
+    useConfirmation();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     teamName: "",
     manager: "",
     director: "",
-  })
-  const [members, setMembers] = useState<Array<{ _id?: string; name: string }>>([{ name: "" }])
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  });
+  const [members, setMembers] = useState<Array<{ _id?: string; name: string }>>(
+    [{ name: "" }]
+  );
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     if (!formData.teamName.trim()) {
-      newErrors.teamName = "Team name is required"
+      newErrors.teamName = "Team name is required";
     }
     if (!formData.manager.trim()) {
-      newErrors.manager = "Manager is required"
+      newErrors.manager = "Manager is required";
     }
     if (!formData.director.trim()) {
-      newErrors.director = "Director is required"
+      newErrors.director = "Director is required";
     }
 
     members.forEach((member, index) => {
       if (!member.name.trim()) {
-        newErrors[`member-${index}`] = "Member name is required"
+        newErrors[`member-${index}`] = "Member name is required";
       }
-    })
+    });
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateForm()) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     const confirmed = await confirm({
@@ -63,16 +66,16 @@ export default function NewTeamPage() {
       confirmText: "Create Team",
       cancelText: "Cancel",
       variant: "default",
-    })
+    });
 
-    if (!confirmed) return
+    if (!confirmed) return;
 
-    setLoading(true)
+    setLoading(true);
     try {
       const membersWithIds = members.map((member) => ({
         ...member,
         _id: member._id || Math.random().toString(36).substring(2, 15),
-      }))
+      }));
 
       const response = await fetch("/api/teams", {
         method: "POST",
@@ -81,64 +84,67 @@ export default function NewTeamPage() {
           ...formData,
           members: membersWithIds,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.success) {
         toast({
           title: "Team Created Successfully",
           description: `"${formData.teamName}" has been created with ${members.length} member(s).`,
-        })
-        router.push("/")
+        });
+        router.push("/");
       } else {
         toast({
           title: "Error",
-          description: data.error || `Failed to create team "${formData.teamName}". Please try again.`,
+          description:
+            data.error ||
+            `Failed to create team "${formData.teamName}". Please try again.`,
           variant: "destructive",
-        })
+        });
       }
     } catch (error) {
       toast({
         title: "Error",
         description: `Failed to create team "${formData.teamName}". Please try again.`,
         variant: "destructive",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleAddMember = () => {
-    setMembers([...members, { name: "" }])
-  }
+    setMembers([...members, { name: "" }]);
+  };
 
   const handleRemoveMember = (index: number) => {
     if (members.length > 1) {
-      const newMembers = members.filter((_, i) => i !== index)
-      setMembers(newMembers)
+      const newMembers = members.filter((_, i) => i !== index);
+      setMembers(newMembers);
     }
-  }
+  };
 
   const handleMemberUpdate = (index: number, name: string) => {
-    const newMembers = [...members]
-    newMembers[index] = { ...newMembers[index], name }
-    setMembers(newMembers)
-  }
+    const newMembers = [...members];
+    newMembers[index] = { ...newMembers[index], name };
+    setMembers(newMembers);
+  };
 
   const handleExit = async () => {
     const confirmed = await confirm({
       title: "Exit Without Saving",
-      message: "Are you sure you want to exit without saving?\n\nAll your changes will be lost.",
+      message:
+        "Are you sure you want to exit without saving?\n\nAll your changes will be lost.",
       confirmText: "Exit",
       cancelText: "Stay",
       variant: "danger",
-    })
+    });
 
     if (confirmed) {
-      router.push("/")
+      router.push("/");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-6">
@@ -158,14 +164,19 @@ export default function NewTeamPage() {
           <h1 className="text-5xl font-bold text-foreground tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             Create New Team
           </h1>
-          <p className="mt-2 text-lg text-muted-foreground">Fill in the details to create a new team</p>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Fill in the details to create a new team
+          </p>
         </div>
 
         <div className="rounded-2xl border-2 border-border bg-card p-8 shadow-xl animate-scale-in">
           <form onSubmit={handleSubmit}>
             <div className="space-y-6">
               <div>
-                <label htmlFor="teamName" className="mb-2 block text-sm font-semibold text-foreground">
+                <label
+                  htmlFor="teamName"
+                  className="mb-2 block text-sm font-semibold text-foreground"
+                >
                   Team Name <span className="text-destructive">*</span>
                 </label>
                 <input
@@ -173,8 +184,8 @@ export default function NewTeamPage() {
                   id="teamName"
                   value={formData.teamName}
                   onChange={(e) => {
-                    setFormData({ ...formData, teamName: e.target.value })
-                    setErrors({ ...errors, teamName: "" })
+                    setFormData({ ...formData, teamName: e.target.value });
+                    setErrors({ ...errors, teamName: "" });
                   }}
                   className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
                     errors.teamName
@@ -183,11 +194,18 @@ export default function NewTeamPage() {
                   }`}
                   placeholder="Enter team name"
                 />
-                {errors.teamName && <p className="mt-1.5 text-sm text-destructive font-medium">{errors.teamName}</p>}
+                {errors.teamName && (
+                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                    {errors.teamName}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="manager" className="mb-2 block text-sm font-semibold text-foreground">
+                <label
+                  htmlFor="manager"
+                  className="mb-2 block text-sm font-semibold text-foreground"
+                >
                   Manager <span className="text-destructive">*</span>
                 </label>
                 <input
@@ -195,8 +213,8 @@ export default function NewTeamPage() {
                   id="manager"
                   value={formData.manager}
                   onChange={(e) => {
-                    setFormData({ ...formData, manager: e.target.value })
-                    setErrors({ ...errors, manager: "" })
+                    setFormData({ ...formData, manager: e.target.value });
+                    setErrors({ ...errors, manager: "" });
                   }}
                   className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
                     errors.manager
@@ -205,11 +223,18 @@ export default function NewTeamPage() {
                   }`}
                   placeholder="Enter manager name"
                 />
-                {errors.manager && <p className="mt-1.5 text-sm text-destructive font-medium">{errors.manager}</p>}
+                {errors.manager && (
+                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                    {errors.manager}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="director" className="mb-2 block text-sm font-semibold text-foreground">
+                <label
+                  htmlFor="director"
+                  className="mb-2 block text-sm font-semibold text-foreground"
+                >
                   Director <span className="text-destructive">*</span>
                 </label>
                 <input
@@ -217,8 +242,8 @@ export default function NewTeamPage() {
                   id="director"
                   value={formData.director}
                   onChange={(e) => {
-                    setFormData({ ...formData, director: e.target.value })
-                    setErrors({ ...errors, director: "" })
+                    setFormData({ ...formData, director: e.target.value });
+                    setErrors({ ...errors, director: "" });
                   }}
                   className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
                     errors.director
@@ -227,7 +252,11 @@ export default function NewTeamPage() {
                   }`}
                   placeholder="Enter director name"
                 />
-                {errors.director && <p className="mt-1.5 text-sm text-destructive font-medium">{errors.director}</p>}
+                {errors.director && (
+                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                    {errors.director}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -238,9 +267,9 @@ export default function NewTeamPage() {
                   <button
                     type="button"
                     onClick={handleAddMember}
-                    className="rounded-xl bg-success px-5 py-2.5 text-sm font-semibold text-success-foreground shadow-md hover:bg-success/90 hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                    className="rounded-xl bg-success px-5 py-2.5 text-sm font-semibold text-success-foreground shadow-md hover:bg-success/90 hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 whitespace-nowrap"
                   >
-                    + Add New Member
+                    + Add Member
                   </button>
                 </div>
                 <div className="space-y-3">
@@ -276,5 +305,5 @@ export default function NewTeamPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

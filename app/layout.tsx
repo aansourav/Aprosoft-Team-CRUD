@@ -1,32 +1,27 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Toaster } from "@/components/ui/toaster"
-import { Suspense } from "react"
-import "./globals.css"
+import type { Metadata } from "next";
+import type React from "react";
+import { Suspense } from "react";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Team Management - Aprosoft",
+  title: "Aprosoft Team Crud",
   description: "Team Management CRUD Application",
-  generator: "v0.app",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body>
         <Suspense fallback={null}>
           {children}
           <Toaster />
         </Suspense>
-        <Analytics />
       </body>
     </html>
-  )
+  );
 }
