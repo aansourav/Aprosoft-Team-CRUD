@@ -147,7 +147,7 @@ export default function NewTeamPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-4 sm:p-6">
       {loading && <LoadingSpinner />}
       <ConfirmationModal
         isOpen={isOpen}
@@ -160,22 +160,22 @@ export default function NewTeamPage() {
         onCancel={handleCancel}
       />
       <div className="mx-auto max-w-3xl">
-        <div className="mb-8 animate-slide-in">
-          <h1 className="text-5xl font-bold text-foreground tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <div className="mb-6 sm:mb-8 animate-slide-in">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             Create New Team
           </h1>
-          <p className="mt-2 text-lg text-muted-foreground">
+          <p className="mt-2 text-sm sm:text-base lg:text-lg text-muted-foreground">
             Fill in the details to create a new team
           </p>
         </div>
 
-        <div className="rounded-2xl border-2 border-border bg-card p-8 shadow-xl animate-scale-in">
+        <div className="rounded-2xl border-2 border-border bg-card p-4 sm:p-6 lg:p-8 shadow-xl animate-scale-in">
           <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
                 <label
                   htmlFor="teamName"
-                  className="mb-2 block text-sm font-semibold text-foreground"
+                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
                 >
                   Team Name <span className="text-destructive">*</span>
                 </label>
@@ -187,7 +187,7 @@ export default function NewTeamPage() {
                     setFormData({ ...formData, teamName: e.target.value });
                     setErrors({ ...errors, teamName: "" });
                   }}
-                  className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
+                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
                     errors.teamName
                       ? "border-destructive focus:ring-destructive/20"
                       : "border-input focus:border-primary focus:ring-primary/10"
@@ -195,7 +195,7 @@ export default function NewTeamPage() {
                   placeholder="Enter team name"
                 />
                 {errors.teamName && (
-                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
                     {errors.teamName}
                   </p>
                 )}
@@ -204,7 +204,7 @@ export default function NewTeamPage() {
               <div>
                 <label
                   htmlFor="manager"
-                  className="mb-2 block text-sm font-semibold text-foreground"
+                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
                 >
                   Manager <span className="text-destructive">*</span>
                 </label>
@@ -216,7 +216,7 @@ export default function NewTeamPage() {
                     setFormData({ ...formData, manager: e.target.value });
                     setErrors({ ...errors, manager: "" });
                   }}
-                  className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
+                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
                     errors.manager
                       ? "border-destructive focus:ring-destructive/20"
                       : "border-input focus:border-primary focus:ring-primary/10"
@@ -224,7 +224,7 @@ export default function NewTeamPage() {
                   placeholder="Enter manager name"
                 />
                 {errors.manager && (
-                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
                     {errors.manager}
                   </p>
                 )}
@@ -233,7 +233,7 @@ export default function NewTeamPage() {
               <div>
                 <label
                   htmlFor="director"
-                  className="mb-2 block text-sm font-semibold text-foreground"
+                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
                 >
                   Director <span className="text-destructive">*</span>
                 </label>
@@ -245,7 +245,7 @@ export default function NewTeamPage() {
                     setFormData({ ...formData, director: e.target.value });
                     setErrors({ ...errors, director: "" });
                   }}
-                  className={`w-full rounded-xl border-2 px-4 py-3 focus:outline-none focus:ring-4 transition-all ${
+                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
                     errors.director
                       ? "border-destructive focus:ring-destructive/20"
                       : "border-input focus:border-primary focus:ring-primary/10"
@@ -253,26 +253,26 @@ export default function NewTeamPage() {
                   placeholder="Enter director name"
                 />
                 {errors.director && (
-                  <p className="mt-1.5 text-sm text-destructive font-medium">
+                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
                     {errors.director}
                   </p>
                 )}
               </div>
 
               <div>
-                <div className="mb-3 flex items-center justify-between">
-                  <label className="block text-sm font-semibold text-foreground">
+                <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2">
+                  <label className="block text-xs sm:text-sm font-semibold text-foreground">
                     Team Members <span className="text-destructive">*</span>
                   </label>
                   <button
                     type="button"
                     onClick={handleAddMember}
-                    className="rounded-xl bg-success px-5 py-2.5 text-sm font-semibold text-success-foreground shadow-md hover:bg-success/90 hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 whitespace-nowrap"
+                    className="rounded-xl bg-success px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-success-foreground shadow-md hover:bg-success/90 hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 whitespace-nowrap"
                   >
                     + Add Member
                   </button>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {members.map((member, index) => (
                     <TeamMemberRow
                       key={index}
@@ -286,17 +286,17 @@ export default function NewTeamPage() {
               </div>
             </div>
 
-            <div className="mt-8 flex gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3">
               <button
                 type="submit"
-                className="rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
+                className="rounded-xl bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 Save Team
               </button>
               <button
                 type="button"
                 onClick={handleExit}
-                className="rounded-xl bg-secondary px-8 py-3 font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/80 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
+                className="rounded-xl bg-secondary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/80 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 Exit
               </button>
