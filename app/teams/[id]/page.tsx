@@ -1,8 +1,10 @@
 "use client";
 
 import { ConfirmationModal } from "@/components/confirmation-modal";
+import { FormActions } from "@/components/form-actions";
+import { FormField } from "@/components/form-field";
 import { LoadingSpinner } from "@/components/loading-spinner";
-import { TeamMemberRow } from "@/components/team-member-row";
+import { TeamMembersSection } from "@/components/team-members-section";
 import { useConfirmation } from "@/hooks/use-confirmation";
 import { useToast } from "@/hooks/use-toast";
 import type { Team } from "@/lib/types";
@@ -204,135 +206,52 @@ export default function EditTeamPage() {
         <div className="rounded-2xl border-2 border-border bg-card p-4 sm:p-6 lg:p-8 shadow-xl animate-scale-in">
           <form onSubmit={handleSubmit}>
             <div className="space-y-4 sm:space-y-6">
-              <div>
-                <label
-                  htmlFor="teamName"
-                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
-                >
-                  Team Name <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="teamName"
-                  value={formData.teamName}
-                  onChange={(e) => {
-                    setFormData({ ...formData, teamName: e.target.value });
-                    setErrors({ ...errors, teamName: "" });
-                  }}
-                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
-                    errors.teamName
-                      ? "border-destructive focus:ring-destructive/20"
-                      : "border-input focus:border-primary focus:ring-primary/10"
-                  }`}
-                  placeholder="Enter team name"
-                />
-                {errors.teamName && (
-                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
-                    {errors.teamName}
-                  </p>
-                )}
-              </div>
+              <FormField
+                id="teamName"
+                label="Team Name"
+                value={formData.teamName}
+                onChange={(value) => {
+                  setFormData({ ...formData, teamName: value });
+                  setErrors({ ...errors, teamName: "" });
+                }}
+                error={errors.teamName}
+                placeholder="Enter team name"
+              />
 
-              <div>
-                <label
-                  htmlFor="manager"
-                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
-                >
-                  Manager <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="manager"
-                  value={formData.manager}
-                  onChange={(e) => {
-                    setFormData({ ...formData, manager: e.target.value });
-                    setErrors({ ...errors, manager: "" });
-                  }}
-                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
-                    errors.manager
-                      ? "border-destructive focus:ring-destructive/20"
-                      : "border-input focus:border-primary focus:ring-primary/10"
-                  }`}
-                  placeholder="Enter manager name"
-                />
-                {errors.manager && (
-                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
-                    {errors.manager}
-                  </p>
-                )}
-              </div>
+              <FormField
+                id="manager"
+                label="Manager"
+                value={formData.manager}
+                onChange={(value) => {
+                  setFormData({ ...formData, manager: value });
+                  setErrors({ ...errors, manager: "" });
+                }}
+                error={errors.manager}
+                placeholder="Enter manager name"
+              />
 
-              <div>
-                <label
-                  htmlFor="director"
-                  className="mb-1.5 sm:mb-2 block text-xs sm:text-sm font-semibold text-foreground"
-                >
-                  Director <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="director"
-                  value={formData.director}
-                  onChange={(e) => {
-                    setFormData({ ...formData, director: e.target.value });
-                    setErrors({ ...errors, director: "" });
-                  }}
-                  className={`w-full rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-4 transition-all ${
-                    errors.director
-                      ? "border-destructive focus:ring-destructive/20"
-                      : "border-input focus:border-primary focus:ring-primary/10"
-                  }`}
-                  placeholder="Enter director name"
-                />
-                {errors.director && (
-                  <p className="mt-1.5 text-xs sm:text-sm text-destructive font-medium">
-                    {errors.director}
-                  </p>
-                )}
-              </div>
+              <FormField
+                id="director"
+                label="Director"
+                value={formData.director}
+                onChange={(value) => {
+                  setFormData({ ...formData, director: value });
+                  setErrors({ ...errors, director: "" });
+                }}
+                error={errors.director}
+                placeholder="Enter director name"
+              />
 
-              <div>
-                <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2">
-                  <label className="block text-xs sm:text-sm font-semibold text-foreground">
-                    Team Members <span className="text-destructive">*</span>
-                  </label>
-                  <button
-                    type="button"
-                    onClick={handleAddMember}
-                    className="rounded-xl bg-success px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-success-foreground shadow-md hover:bg-success/90 hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 whitespace-nowrap"
-                  >
-                    + Add Member
-                  </button>
-                </div>
-                <div className="space-y-2 sm:space-y-3">
-                  {members.map((member, index) => (
-                    <TeamMemberRow
-                      key={index}
-                      member={member}
-                      onUpdate={(name) => handleMemberUpdate(index, name)}
-                      onRemove={() => handleRemoveMember(index)}
-                      error={errors[`member-${index}`]}
-                    />
-                  ))}
-                </div>
-              </div>
+              <TeamMembersSection
+                members={members}
+                errors={errors}
+                onMemberUpdate={handleMemberUpdate}
+                onRemoveMember={handleRemoveMember}
+                onAddMember={handleAddMember}
+              />
             </div>
 
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <button
-                type="submit"
-                className="rounded-xl bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
-              >
-                Save Team
-              </button>
-              <button
-                type="button"
-                onClick={handleExit}
-                className="rounded-xl bg-secondary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-secondary-foreground shadow-lg hover:bg-secondary/80 hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
-              >
-                Exit
-              </button>
-            </div>
+            <FormActions onSubmit={() => {}} onExit={handleExit} />
           </form>
         </div>
       </div>
