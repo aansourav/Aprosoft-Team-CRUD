@@ -1,6 +1,13 @@
-# 🚀 Team Management System
+# 🚀 Aprosoft Team CRUD
 
-A modern, full-stack team management application built with Next.js 14, TypeScript, and MongoDB. Features a beautiful UI with drag-and-drop reordering, real-time search, optimistic updates, and comprehensive CRUD operations.
+A modern, full-stack team management application built with Next.js 15, TypeScript, and MongoDB. Features a beautiful UI with drag-and-drop reordering, real-time search, optimistic updates, and comprehensive CRUD operations.
+
+## 🌐 Live Demo
+
+**[View Live Application →](https://aprosoft-team-crud.vercel.app/)**
+
+Experience the full-featured team management system in action!
+
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
@@ -36,7 +43,6 @@ A modern, full-stack team management application built with Next.js 14, TypeScri
 - 🎨 **Component Library** - 15+ reusable components
 - 📦 **Custom Hooks** - 5 specialized hooks for state management
 
-## 📸 Screenshots
 
 ### Desktop View
 
