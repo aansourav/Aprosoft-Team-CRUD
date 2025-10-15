@@ -15,7 +15,7 @@ import { useTeams } from "@/hooks/use-teams";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import type React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function TeamsPage() {
   const router = useRouter();
@@ -26,9 +26,7 @@ export default function TeamsPage() {
   // Teams management with API operations
   const {
     teams,
-    filteredTeams: teamsFilteredBySearch,
     loading,
-    setFilteredTeams,
     fetchTeams,
     deleteTeam,
     bulkDeleteTeams,
@@ -49,11 +47,23 @@ export default function TeamsPage() {
   const { selectedTeams, handleSelectTeam, selectAll, clearSelection } =
     useTeamSelection();
 
+  // Local state for drag operations to maintain order during dragging
+  const [localFilteredTeams, setLocalFilteredTeams] = useState(filteredTeams);
+
+  // Sync localFilteredTeams when filteredTeams (from search) changes
+  useEffect(() => {
+    setLocalFilteredTeams(filteredTeams);
+  }, [filteredTeams]);
+
   // Drag and drop
   const { handleDragStart, handleDragOver, handleDragEnd } = useTeamDrag(
-    filteredTeams,
-    setFilteredTeams,
-    reorderTeams
+    localFilteredTeams,
+    setLocalFilteredTeams,
+    async (newTeams) => {
+      await reorderTeams(newTeams);
+      // Fetch teams again to get the updated order from the server
+      await fetchTeams();
+    }
   );
 
   useEffect(() => {
@@ -141,17 +151,17 @@ export default function TeamsPage() {
 
         <SelectAllCheckbox
           checked={
-            selectedTeams.size === filteredTeams.length &&
-            filteredTeams.length > 0
+            selectedTeams.size === localFilteredTeams.length &&
+            localFilteredTeams.length > 0
           }
           onChange={(checked) => {
             if (checked) {
-              selectAll(filteredTeams.map((t) => t._id!));
+              selectAll(localFilteredTeams.map((t) => t._id!));
             } else {
               clearSelection();
             }
           }}
-          count={filteredTeams.length}
+          count={localFilteredTeams.length}
         />
 
         <div className="overflow-hidden rounded-2xl border-2 border-border bg-card shadow-xl animate-scale-in">
@@ -163,12 +173,12 @@ export default function TeamsPage() {
                     <input
                       type="checkbox"
                       checked={
-                        selectedTeams.size === filteredTeams.length &&
-                        filteredTeams.length > 0
+                        selectedTeams.size === localFilteredTeams.length &&
+                        localFilteredTeams.length > 0
                       }
                       onChange={(e) => {
                         if (e.target.checked) {
-                          selectAll(filteredTeams.map((t) => t._id!));
+                          selectAll(localFilteredTeams.map((t) => t._id!));
                         } else {
                           clearSelection();
                         }
@@ -200,7 +210,7 @@ export default function TeamsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filteredTeams.map((team, index) => (
+                {localFilteredTeams.map((team, index) => (
                   <TeamRow
                     key={team._id}
                     team={team}
@@ -222,7 +232,7 @@ export default function TeamsPage() {
               </tbody>
             </table>
           </div>
-          {filteredTeams.length === 0 && (
+          {localFilteredTeams.length === 0 && (
             <EmptyState
               message={
                 searchQuery
