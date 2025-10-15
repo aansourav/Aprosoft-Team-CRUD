@@ -4,15 +4,15 @@ A modern, full-stack team management application built with Next.js 15, TypeScri
 
 ## 🌐 Live Demo
 
-**[View Live Application →](https://aprosoft-team-crud.vercel.app/)**
+### **[View Live Application - Aprosoft Team CRUD →](https://aprosoft-team-crud.vercel.app/)**
 
 Experience the full-featured team management system in action!
 
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![MongoDB](https://img.shields.io/badge/MongoDB-7-green)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8)
 
 ## ✨ Features
 
